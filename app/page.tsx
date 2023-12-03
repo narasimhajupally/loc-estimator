@@ -59,9 +59,9 @@ export default function Home() {
                                 />
                             </svg>
                         </div>
-                        {selectedFile && <div>{selectedFile.name}</div>}
+                        <div className="text-sm">selected : {selectedFile ? selectedFile.name : "None"}</div>
 
-                        <div className="text-xxs lg:mt-6 mt-2">Click to select a file</div>
+                        <div className="text-xs lg:mt-6 mt-2">Click to select a file</div>
                         <input
                             type="file"
                             onChange={(e) => {
@@ -73,7 +73,11 @@ export default function Home() {
                             // accept="text/plain"
                         />
                     </label>
-                    <button className="bg-white text-black px-4 py-2 rounded-md disabled:opacity-50" disabled={inProgress} onClick={getFileAnalysis}>
+                    <button
+                        className="bg-white text-black px-4 py-2 rounded-md disabled:opacity-50"
+                        disabled={inProgress || !selectedFile}
+                        onClick={getFileAnalysis}
+                    >
                         Get Analysis
                     </button>
                 </div>
