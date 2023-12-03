@@ -6,9 +6,11 @@ import { useRef, useState } from "react";
 export default function Home() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [analysis, setAnalysis] = useState(null);
+    const [inProgress, setInProgress] = useState(false);
 
     const getFileAnalysis = () => {
         if (!selectedFile) return;
+        setInProgress(true);
         fetch("/api/", {
             method: "POST",
             headers: { "Content-Filename": selectedFile.name },
@@ -16,7 +18,10 @@ export default function Home() {
         })
             .then((res) => res.json())
             .then((data) => setAnalysis(data))
-            .catch();
+            .catch()
+            .finally(() => {
+                setInProgress(false);
+            });
     };
     return (
         <main className="flex min-h-screen flex-col items-center px-4 py-8 gap-4 lg:gap-16">
@@ -68,7 +73,7 @@ export default function Home() {
                             // accept="text/plain"
                         />
                     </label>
-                    <button className="bg-white text-black px-4 py-2 rounded-md" onClick={getFileAnalysis}>
+                    <button className="bg-white text-black px-4 py-2 rounded-md disabled:opacity-50" disabled={inProgress} onClick={getFileAnalysis}>
                         Get Analysis
                     </button>
                 </div>
